@@ -42,6 +42,7 @@ class Rogue extends Character
         // Vérifier si la valeur d'attaque atteint l'agilité maximale
         if ($attackValue >= $this->agility) {
             $attackValue *= 2;  // Doubler la valeur de l'attaque
+            $_SESSION['characters'][$this->name]['life'] = $this->life;
             return "{$this->name} effectue une attaque spéciale furtive avec son agilité maximale : {$attackValue}!";
         }
 

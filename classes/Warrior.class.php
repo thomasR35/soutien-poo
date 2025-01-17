@@ -47,7 +47,8 @@ class Warrior extends Character
 
         // Vérifier si la valeur d'attaque est la plus basse (échec critique)
         if ($attackValue <= 0) {
-            $this->life -= 10;  // Retirer 10 points de vie en cas d'échec critique
+            $this->life -= 10;
+            $_SESSION['characters'][$this->name]['life'] = $this->life;
             return "{$this->name} se tranche le visage, ivre de rage ! Échec critique, -10 PV. Vie restante: {$this->life}.";
         }
 

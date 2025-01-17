@@ -42,6 +42,7 @@ class Mage extends Character
         // Vérifier si la valeur d'attaque atteint l'intelligence maximale
         if ($attackValue >= $this->intelligence) {
             $attackValue *= 2;  // Doubler la valeur de l'attaque
+            $_SESSION['characters'][$this->name]['life'] = $this->life;
             return "{$this->name} lance un sort spécial avec son intelligence maximale : {$attackValue}!";
         }
 

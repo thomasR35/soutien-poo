@@ -4,6 +4,42 @@ require_once __DIR__ . '/classes/Mage.class.php';
 require_once __DIR__ . '/classes/Rogue.class.php';
 require_once 'Chapter.php';
 require_once __DIR__ . '/classes/Character.php';
+
+session_start();  // Démarrer la session
+
+// Vérifier l'existence des personnages dans la session
+if (!isset($_SESSION['characters'])) {
+    // Si aucun personnage n'est enregistré, on les initialise
+    $_SESSION['characters'] = [
+        'warrior1' => ['name' => 'Varian', 'life' => 150, 'strength' => 14],
+        'mage1' => ['name' => 'Khadgar', 'life' => 100, 'intelligence' => 15],
+        'rogue1' => ['name' => 'Garona', 'life' => 100, 'agility' => 15],
+        'rogue2' => ['name' => 'Valeera', 'life' => 100, 'agility' => 15],
+        'warrior2' => ['name' => 'Garrosh', 'life' => 150, 'strength' => 14],
+        'mage2' => ['name' => 'Jaina', 'life' => 100, 'intelligence' => 15],
+    ];
+}
+
+// Créer les objets en utilisant les données de la session
+$warrior1Data = $_SESSION['characters']['warrior1'];
+$mage1Data = $_SESSION['characters']['mage1'];
+$rogue1Data = $_SESSION['characters']['rogue1'];
+
+$warrior1 = new Warrior($warrior1Data['name'], $warrior1Data['life']);
+$mage1 = new Mage($mage1Data['name'], $mage1Data['life']);
+$rogue1 = new Rogue($rogue1Data['name'], $rogue1Data['life']);
+
+$warrior2Data = $_SESSION['characters']['warrior2'];
+$mage2Data = $_SESSION['characters']['mage2'];
+$rogue2Data = $_SESSION['characters']['rogue2'];
+
+$warrior2 = new Warrior($warrior2Data['name'], $warrior2Data['life']);
+$mage2 = new Mage($mage2Data['name'], $mage2Data['life']);
+$rogue2 = new Rogue($rogue2Data['name'], $rogue2Data['life']);
+
+
+
+
 class Story
 {
     private array $characters = [];
@@ -86,14 +122,27 @@ foreach ($group1 as $character) {
     $group1Content .= "Intelligence: " . $character->getIntelligence() . "</br>";
     $group1Content .= "Charisme: " . $character->getCharisma() . "</br></br>";
 
+    // Action et mise à jour de la vie
     if ($character instanceof Warrior) {
         $group1Content .= $character->strike() . "</br></br>";
+        // Mise à jour de la vie du personnage dans la session
+        $_SESSION['characters']['warrior1']['life'] = $warrior1->getLife();
     } elseif ($character instanceof Mage) {
         $group1Content .= $character->cast() . "</br></br>";
+        // Mise à jour de la vie du personnage dans la session
+        $_SESSION['characters']['mage1']['life'] = $mage1->getLife();
     } elseif ($character instanceof Rogue) {
         $group1Content .= $character->stab() . "</br></br>";
+        // Mise à jour de la vie du personnage dans la session
+        $_SESSION['characters']['rogue1']['life'] = $rogue1->getLife();
     }
 }
+
+// Assurez-vous que la session est correctement enregistrée
+session_commit();  // Enregistre définitivement les modifications dans la session
+
+
+
 
 $group1Chapter = new Chapter("Les Protecteurs", $group1Content);
 $introChapter->setNextChapter($group1Chapter);
@@ -113,10 +162,13 @@ foreach ($group2 as $character) {
 
     if ($character instanceof Warrior) {
         $group2Content .= $character->strike() . "</br></br>";
+        $_SESSION['characters']['warrior2']['life'] = $warrior2->getLife();
     } elseif ($character instanceof Mage) {
         $group2Content .= $character->cast() . "</br></br>";
+        $_SESSION['characters']['mage2']['life'] = $mage2->getLife();
     } elseif ($character instanceof Rogue) {
         $group2Content .= $character->stab() . "</br></br>";
+        $_SESSION['characters']['rogue2']['life'] = $rogue2->getLife();
     }
 }
 
